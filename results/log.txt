@@ -1,0 +1,4 @@
+UniformSamplingKeypointDetector Keypoint detector = 0.08 
+CompassEstimator rad=0.3
+Namespace(config_file='configs/test_3dm.yaml', ext_cloud='ply', id_gpu=0, is_batch=1, leaf=0.02, lrf_bandwidths=[24, 24, 24, 24, 24], lrf_features=[4, 40, 20, 10, 1], min_distance=0.02, name_data_set='3DMatch', name_file_gt='gt.log', name_file_overlap=None, num_workers=6, overlap_threshold=None, path_ckp_layer_lrf='pretrained_models/basemodel/lrf_layer.pkl', path_ckp_layer_s2='pretrained_models/basemodel/s2_layer.pkl', path_ds='data/test-set.mat', path_results='results', radius_descriptor=0.3, radius_detector=0.08, size_batch=8, size_point_cloud=1220, th_cosine=0.97, use_gpu=1)
+Benchmark start at [2021-11-15 19:31:38.432502]

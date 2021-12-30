@@ -1,5 +1,5 @@
 import open3d as o3d
-from spherical_voxel import spherical_voxel as sv
+from utils.spherical_voxel import spherical_voxel as sv
 from lie_learn.spaces import S2
 from typing import Tuple
 import numpy as np

@@ -41,7 +41,7 @@ parser.add_argument("--file_list_train", type=str, required=True, help="CSV file
 parser.add_argument("--file_list_test", type=str, required=True, help="CSV file with folder to use in test.")
 
 opt = parser.parse_args()
-print(opt)
+print(opt)q
 
 blue = lambda x: '\033[94m' + x + '\033[0m'
 
