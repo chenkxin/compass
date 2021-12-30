@@ -12,9 +12,15 @@
 
 date=`date +%Y-%m-%d`
 nm_train="Compass_ModelNet"
-dir_ds="/media/mmarcon/data/DATASETS/modelnet40_ply_hdf5_2048/" #path to the dataset
+
+#dir_ds="/media/mmarcon/data/DATASETS/modelnet40_ply_hdf5_2048/" #path to the dataset
+dir_ds="/home/chenkangxin/data/compass/modelnet40_ply_hdf5_2048/" #path to the dataset
+
 date_time=`date +%Y-%m-%d_%H-%M`
-dir_log="/media/mmarcon/data/Train_SOUND/ModelNet/$date_time-$nm_train" #path to save training files
+
+#dir_log="/media/mmarcon/data/Train_SOUND/ModelNet/$date_time-$nm_train" #path to save training files
+dir_log="/home/chenkangxin/compass/log/Train_SOUND/ModelNet/$date_time-$nm_train" #path to save training files
+
 ep_max=100
 file_train="$dir_ds/train.csv"
 file_validation="$dir_ds/validation.csv"
@@ -27,7 +33,7 @@ stp_save=200
 stp_viz=50
 name_data_set="ModelNet"
 
-export PYTHONPATH="/home/mmarcon/workspace_python/compass" #put your workspace's path
+export PYTHONPATH="/home/chenkangxin/compass/compass" #put your workspace's path
 
 python3 ../apps/train_compass.py  --lrf_bandwidths 24 24 24 24 24 --lrf_features 4 40 20 10 1 \
 	                              --ext $ext --epochs_max $ep_max \
