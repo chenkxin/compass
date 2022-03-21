@@ -287,3 +287,8 @@ class LocalPointCloudDataset(torch.utils.data.Dataset):
                         self.num_samples += 1
 
                 progress_bar.print_progress(i+1, len(self.files))
+
+if __name__ == '__main__':
+    print('hello world')
+    da = LocalPointCloudDataset(path_root="/home/chenkangxin/compass/data/modelnet40", file_list_folders="train.csv", path_npy="", extension="", limit=10, min_nn="", radius="", size_leaf_keypoints="", size_leaf_ss="", augmentation="", removal_augmentation="", transform="")
+    print(da)

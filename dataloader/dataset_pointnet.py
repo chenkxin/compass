@@ -95,4 +95,7 @@ class ModelNetDataset(data.Dataset):
     def __len__(self):
         return self.labels.shape[0]
 
-
+if __name__ == '__main__':
+    print('hello world')
+    da = ModelNetDataset(root="/home/chenkangxin/data/compass/modelnet40", file_list_folders="train.csv", )
+    print(da)
