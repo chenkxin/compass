@@ -340,3 +340,7 @@ def rotation_from_matrix(matrix):
         sina = (R[2, 1] + (cosa-1.0)*direction[1]*direction[2]) / direction[0]
     angle = math.atan2(sina, cosa)
     return angle, direction, point
+
+
+if __name__ == '__main__':
+    print(sv.compute)
