@@ -15,6 +15,7 @@ from features import lrf_compass_object as compass
 from utils import torch as utor
 from utils import geometry as ug
 
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -41,7 +42,7 @@ parser.add_argument("--file_list_train", type=str, required=True, help="CSV file
 parser.add_argument("--file_list_test", type=str, required=True, help="CSV file with folder to use in test.")
 
 opt = parser.parse_args()
-print(opt)q
+print(opt)
 
 blue = lambda x: '\033[94m' + x + '\033[0m'
 
