@@ -184,7 +184,8 @@ for i,data in tqdm(enumerate(testdataloader, 0)):
     for i in range(points.shape[0]):
         lrf_estimator.radius_support = ug.get_max_radius(np.asarray(points[i]))
         lrf = lrf_estimator(np.asarray(points[i]))
-        points[i] = points[i] @ lrf[0].T
+        # points[i] = points[i] @ lrf[0].T
+        points[i] = points[i] @ torch.from_numpy(lrf[0].T)
 
 
     target = target[:, 0]
