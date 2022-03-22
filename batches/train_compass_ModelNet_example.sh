@@ -29,6 +29,7 @@ rad_desc=0.30
 num_work=12
 num_pts=2048
 sz_btch=8
+#sz_btch=4
 stp_save=200
 stp_viz=50
 name_data_set="ModelNet"
