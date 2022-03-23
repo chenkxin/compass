@@ -53,7 +53,7 @@ export PYTHONPATH="/home/chenkangxin/compass"
 #                                                --file_list_train $file_train --file_list_test $file_test
 #                                                #--path_pointnet $path_pointnet
 
-python ./apps/train_classification_pointnet.py --dataset $data_path --nepoch=$n_epocs --dataset_type $dataset_type \
+python ./apps/train_classification_pointnet.py --dataset $data_path --nepoch $n_epocs --dataset_type $dataset_type \
                                                 --outf $output_folder --batchSize 50 --num_points 2048 \
                                                 --workers 8 --feature_transform $feature_transform \
                                                 --rotate_axis $rotate_axis --debug $debug --arbitrary_rotations $AR \
