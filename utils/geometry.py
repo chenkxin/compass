@@ -5,7 +5,7 @@ from typing import Tuple
 import numpy as np
 import math
 import copy
-import torch
+import sb_torch
 
 
 def get_rotation_matrix(alfa, beta, gamma, hom_coord=False):

@@ -10,7 +10,7 @@ from models import soft_argmax as sfa
 from utils import io as uio
 from utils import geometry as ug
 from utils import file_system as ufs
-from utils import torch as utor
+from utils import sb_torch as utor
 from utils import train as utr
 
 

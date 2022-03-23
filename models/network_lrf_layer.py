@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 from models import soft_argmax as sfa
-from utils import torch as uto
+from utils import sb_torch as uto
 
 from s2cnn import so3_equatorial_grid, SO3Convolution, so3_near_identity_grid
 

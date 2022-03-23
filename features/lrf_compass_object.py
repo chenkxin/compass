@@ -6,7 +6,7 @@ from dataloader import spherical_voxel as sv
 from models import network_s2_layer as nsl
 from models import network_lrf_layer as nll
 
-from utils import torch as utor
+from utils import sb_torch as utor
 from utils import progress_bar
 
 import numpy as np

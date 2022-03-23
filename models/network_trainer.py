@@ -8,7 +8,7 @@ import visdom
 
 from abc import ABC, abstractmethod
 from termcolor import colored
-from utils import torch as utor
+from utils import sb_torch as utor
 from utils import train as utr
 
 class NetworkTrainer(ABC):

@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
-from utils import torch as uto
+from utils import sb_torch as uto
 
 from s2cnn import s2_equatorial_grid, s2_near_identity_grid, S2Convolution, so3_equatorial_grid, SO3Convolution, so3_near_identity_grid
 

@@ -12,7 +12,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 from features import lrf_compass_object as compass
-from utils import torch as utor
+from utils import sb_torch as utor
 from utils import geometry as ug
 
 import numpy as np
