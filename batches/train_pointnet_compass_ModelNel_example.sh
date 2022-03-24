@@ -40,7 +40,7 @@ path_lrf="/home/chenkangxin/compass/pretrained_models/modelnet40/lrf_layer.pkl"
 path_s2="/home/chenkangxin/compass/pretrained_models/modelnet40/s2_layer.pkl"
 # To enable test mode, define the pre-trained classifier weights path and set --path_pointnet parameter
 #path_pointnet="/media/mmarcon/data/Train_SOUND/PointNet/Train_classification_PointNet_plain_with_no_augmented_point_on_feature_off_plain-2020-08-12_11-42/cls_model_149.pth"
-path_pointnet="/home/chenkangxin/compass/log/Train_SOUND/PointNet/classification_compass-2022-03-22_21-53/cls_model_149.pth"
+path_pointnet="/home/chenkangxin/compass/log/Train_SOUND/PointNet/classification_compass-2022-03-24_21-51-NR-AR/cls_model_149.pth"
 
 file_train="$data_path/train.csv"
 file_test="$data_path/test.csv"
@@ -62,4 +62,4 @@ python ./apps/train_classification_pointnet.py --dataset $data_path --nepoch $n_
                                                 --rotate_axis $rotate_axis --debug $debug --arbitrary_rotations $AR \
                                                 --path_ckp_layer_lrf $path_lrf --path_ckp_layer_s2 $path_s2 \
                                                 --file_list_train $file_train --file_list_test $file_test \
-#                                                --path_pointnet $path_pointnet
+                                                --path_pointnet $path_pointnet
