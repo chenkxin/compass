@@ -58,5 +58,5 @@ python ./apps/train_classification_pointnet.py --dataset $data_path --nepoch $n_
                                                 --workers 8 --feature_transform $feature_transform \
                                                 --rotate_axis $rotate_axis --debug $debug --arbitrary_rotations $AR \
                                                 --path_ckp_layer_lrf $path_lrf --path_ckp_layer_s2 $path_s2 \
-                                                --file_list_train $file_train --file_list_test $file_test
-#                                                --path_pointnet $path_pointnet
+                                                --file_list_train $file_train --file_list_test $file_test \
+                                                --path_pointnet $path_pointnet
