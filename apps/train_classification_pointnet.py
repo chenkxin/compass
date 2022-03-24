@@ -134,7 +134,7 @@ if opt.path_pointnet == '':
             points, target = data
 
             if opt.arbitrary_rotations:
-                points = ug.rotate_points(points, opt.rotate_axis)
+                points = ug.rotate_points(points)
 
             target = target[:, 0]
             points = points.transpose(2, 1)
@@ -156,7 +156,7 @@ if opt.path_pointnet == '':
                 points, target = data
 
                 if opt.arbitrary_rotations:
-                    points = ug.rotate_points(points, opt.rotate_axis)
+                    points = ug.rotate_points(points)
 
                 target = target[:, 0]
                 points = points.transpose(2, 1)
@@ -179,13 +179,15 @@ for i,data in tqdm(enumerate(testdataloader, 0)):
     points, target = data
 
     if opt.arbitrary_rotations:
-        points = ug.rotate_points(points, opt.rotate_axis)
+        points = ug.rotate_points(points)
 
     for i in range(points.shape[0]):
         lrf_estimator.radius_support = ug.get_max_radius(np.asarray(points[i]))
         lrf = lrf_estimator(np.asarray(points[i]))
+        print(points.shape)
         # points[i] = points[i] @ lrf[0].T
-        points[i] = points[i] @ torch.from_numpy(lrf[0].T)
+        # points[i] = points[i] @ torch.from_numpy(lrf[0].T)
+        points[i] = torch.mm(points[i], torch.from_numpy(lrf[0].T))
 
 
     target = target[:, 0]

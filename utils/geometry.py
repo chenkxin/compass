@@ -341,6 +341,12 @@ def rotation_from_matrix(matrix):
     angle = math.atan2(sina, cosa)
     return angle, direction, point
 
-
+import torch
+def rotate_points(points):
+    rot_mat = get_random_rotation_matrix()
+    for i in range(points.shape[0]):
+        # 每个点旋转相同角度
+        points[i] = torch.mm(points[i], torch.from_numpy(rot_mat).float())
+    return points
 if __name__ == '__main__':
     print(sv.compute)

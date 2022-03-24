@@ -21,7 +21,7 @@ date_time=`date +%Y-%m-%d_%H-%M`
 #output_folder="/media/mmarcon/data/Train_SOUND/PointNet/$nm_train-$date_time/"
 output_folder="/home/chenkangxin/compass/log/Train_SOUND/PointNet/$nm_train-$date_time/"
 feature_transform=0 #use feature t-net on PointNet architecture
-AR=0 #use arbitrary rotations
+AR=1 #use arbitrary rotations
 rotate_axis='all' #define augmentation mode
 debug=0
 
