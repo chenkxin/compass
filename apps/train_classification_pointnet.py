@@ -133,8 +133,9 @@ if opt.path_pointnet == '':
         for i, data in enumerate(dataloader, 0):
             points, target = data
 
-            if opt.arbitrary_rotations:
-                points = ug.rotate_points(points)
+            # enable /disable arbitrary when training
+            # if opt.arbitrary_rotations:
+            #     points = ug.rotate_points(points)
 
             target = target[:, 0]
             points = points.transpose(2, 1)
