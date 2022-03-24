@@ -159,6 +159,14 @@ if opt.path_pointnet == '':
                 if opt.arbitrary_rotations:
                     points = ug.rotate_points(points)
 
+                # 旋转的 points 通过 compass 得到的旋转矩阵中和旋转
+                for j in range(points.shape[0]):
+                    lrf_estimator.radius_support = ug.get_max_radius(np.asarray(points[j]))
+                    lrf = lrf_estimator(np.asarray(points[j]))
+                    # points[i] = points[i] @ lrf[0].T
+                    # points[i] = points[i] @ torch.from_numpy(lrf[0].T)
+                    points[j] = torch.mm(points[j], torch.from_numpy(lrf[0].T))
+
                 target = target[:, 0]
                 points = points.transpose(2, 1)
                 points, target = points.cuda(), target.cuda()
@@ -185,7 +193,6 @@ for i,data in tqdm(enumerate(testdataloader, 0)):
     for i in range(points.shape[0]):
         lrf_estimator.radius_support = ug.get_max_radius(np.asarray(points[i]))
         lrf = lrf_estimator(np.asarray(points[i]))
-        print(points.shape)
         # points[i] = points[i] @ lrf[0].T
         # points[i] = points[i] @ torch.from_numpy(lrf[0].T)
         points[i] = torch.mm(points[i], torch.from_numpy(lrf[0].T))
