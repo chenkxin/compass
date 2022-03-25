@@ -19,7 +19,8 @@ dataset_type="modelnet40" # or shapenet
 nm_train="classification_compass"
 date_time=`date +%Y-%m-%d_%H-%M`
 #output_folder="/media/mmarcon/data/Train_SOUND/PointNet/$nm_train-$date_time/"
-output_folder="/home/chenkangxin/compass/log/Train_SOUND/PointNet/$nm_train-$date_time/"
+comment="NRwithcompass-AR"
+output_folder="/home/chenkangxin/compass/log/Train_SOUND/PointNet/$nm_train-$date_time-$comment/"
 feature_transform=0 #use feature t-net on PointNet architecture
 AR=1 #use arbitrary rotations
 rotate_axis='all' #define augmentation mode
@@ -62,4 +63,4 @@ python ./apps/train_classification_pointnet.py --dataset $data_path --nepoch $n_
                                                 --rotate_axis $rotate_axis --debug $debug --arbitrary_rotations $AR \
                                                 --path_ckp_layer_lrf $path_lrf --path_ckp_layer_s2 $path_s2 \
                                                 --file_list_train $file_train --file_list_test $file_test \
-                                                --path_pointnet $path_pointnet
+#                                                --path_pointnet $path_pointnet
