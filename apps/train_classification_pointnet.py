@@ -188,9 +188,11 @@ for i,data in tqdm(enumerate(testdataloader, 0)):
     points, target = data
 
     np.savetxt('original_pc_1.txt', points[1].numpy())
+    np.savetxt('original_pc_11.txt', points[11].numpy())
     if opt.arbitrary_rotations:
         points = ug.rotate_points(points)
     np.savetxt('AR_pc_1.txt', points[1].numpy())
+    np.savetxt('AR_pc_11.txt', points[11].numpy())
 
     for i in range(points.shape[0]):
         lrf_estimator.radius_support = ug.get_max_radius(np.asarray(points[i]))
@@ -199,6 +201,7 @@ for i,data in tqdm(enumerate(testdataloader, 0)):
         # points[i] = points[i] @ torch.from_numpy(lrf[0].T)
         points[i] = torch.mm(points[i], torch.from_numpy(lrf[0].T))
     np.savetxt('NR_pc_use_compass_1.txt', points[1].numpy())
+    np.savetxt('NR_pc_use_compass_11.txt', points[11].numpy())
     exit(0)
 
 

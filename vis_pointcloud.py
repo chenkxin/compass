@@ -28,3 +28,8 @@ if __name__ == '__main__':
     points2 = np.loadtxt('AR_pc_1.txt')
     points3 = np.loadtxt('NR_pc_use_compass_1.txt')
     visualize(points1, points2, points3)
+
+    points1 = np.loadtxt('original_pc_11.txt')
+    points2 = np.loadtxt('AR_pc_11.txt')
+    points3 = np.loadtxt('NR_pc_use_compass_11.txt')
+    visualize(points1, points2, points3)
