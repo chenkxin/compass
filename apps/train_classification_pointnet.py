@@ -195,15 +195,16 @@ if opt.path_pointnet == '':
         # save the maximum accuracy of one epoch
         accsForEpoch[epoch] = max(accs)
         torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))
+        print("best accuracy: %f" % (accsForEpoch[max(accsForEpoch, key=accsForEpoch.get)]))
 
     # find the maximum accuracy of all epoches
     maxAccEpoch = max(accsForEpoch, key=accsForEpoch.get)
     print('The maximum accutacy in %d epoch, accuracy: %d' % (maxAccEpoch, accsForEpoch[maxAccEpoch]))
     source = '%s/cls_model_%d.pth' % (opt.outf, epoch)
-    target = '%s/best_cls_model_%d.pth' % (opt.outf, epoch)
+    target = '%s/best_%f_cls_model_%d.pth' % (opt.outf, accsForEpoch[maxAccEpoch], epoch)
     print("Saving the best checkpoint...")
     shutil.copy(source, target)
-    print("Done.\nSave at %s/best_cls_model_%d.pth" % (opt.outf, epoch))
+    print("Done.\nSave at %s/best_%f_cls_model_%d.pth" % (opt.outf, accsForEpoch[maxAccEpoch], epoch))
 
 else:
     utor.load_models_from_ckp(opt.path_pointnet, classifier)
