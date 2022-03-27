@@ -29,7 +29,8 @@ parser.add_argument(
 parser.add_argument(
     '--nepoch', type=int, default=200, help='number of epochs to train for')
 parser.add_argument('--outf', type=str, default='cls', help='output folder')
-parser.add_argument('--model', type=str, default='', help='model path')
+# functional overlap with path_checkpoint
+# parser.add_argument('--model', type=str, default='', help='model path')
 parser.add_argument('--dataset', type=str, required=True, help="dataset path")
 parser.add_argument('--dataset_type', type=str, default='shapenet', help="dataset type shapenet|modelnet40")
 parser.add_argument('--feature_transform', type=int, default=0, help="use feature transform")
@@ -113,8 +114,9 @@ print('classes', num_classes)
 
 classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
 
-if opt.model != '':
-    classifier.load_state_dict(torch.load(opt.model))
+# functional overlap with path_checkpoint
+# if opt.model != '':
+#     classifier.load_state_dict(torch.load(opt.model))
 
 
 optimizer = optim.Adam(classifier.parameters(), lr=0.001, betas=(0.9, 0.999))
