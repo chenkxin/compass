@@ -17,6 +17,8 @@ from utils import geometry as ug
 
 import numpy as np
 
+import shutil
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--batchSize', type=int, default=32, help='input batch size')
@@ -127,9 +129,11 @@ if opt.path_pointnet == '':
     except OSError:
         pass
 
+    accsForEpoch = {}
     for epoch in range(opt.nepoch):
         optimizer.step()
         scheduler.step()
+        accs = []
         for i, data in enumerate(dataloader, 0):
             points, target = data
 
@@ -181,9 +185,24 @@ if opt.path_pointnet == '':
                 loss = F.nll_loss(pred, target)
                 pred_choice = pred.data.max(1)[1]
                 correct = pred_choice.eq(target.data).cpu().sum()
-                print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'), loss.item(), correct.item()/float(opt.batchSize)))
+                accuracy = correct.item() / float(opt.batchSize)
+                print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'), loss.item(), accuracy))
+                # save accuracy for every 50 batches
+                accs.append(accuracy)
 
+        # save the maximum accuracy of one epoch
+        accsForEpoch[epoch] = max(accs)
         torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))
+
+    # find the maximum accuracy of all epoches
+    maxAccEpoch = max(accsForEpoch, key=accsForEpoch.get)
+    print('The maximum accutacy in %d epoch, accuracy: %d' % (maxAccEpoch, accsForEpoch[maxAccEpoch]))
+    source = '%s/cls_model_%d.pth' % (opt.outf, epoch)
+    target = '%s/best_cls_model_%d.pth' % (opt.outf, epoch)
+    print("Saving the best checkpoint...")
+    shutil.copy(source, target)
+    print("Done.\nSave at %s/best_cls_model_%d.pth" % (opt.outf, epoch))
+
 else:
     utor.load_models_from_ckp(opt.path_pointnet, classifier)
 
