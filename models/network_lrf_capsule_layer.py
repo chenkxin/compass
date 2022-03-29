@@ -38,6 +38,7 @@ class LrfLayer(nn.Module):
         lrf_sequence.append(nn.BatchNorm3d(self.features[-1], affine=True))
 
         # 胶囊层
+        # 初级胶囊层
         lrf_sequence.append(block.PrimaryCapsuleLayer(
             in_features=self.features[-1], # 40
             num_out_capsules=4,
@@ -46,16 +47,7 @@ class LrfLayer(nn.Module):
             b_out=24,
             use_residual_block=self.use_residual_block
         ))
-        # lrf_sequence.append(block.CapsulePredictionLayer(
-        #     in_features=40,
-        #     num_out_capsules=4,
-        #     out_capsule_dim=10,
-        #     b_in=24,
-        #     b_out=24,
-        #     use_residual_block=True,
-        # ))
-        # batch_size * ((2 * b_in) ** 3), nclass, in_capsule_dim, num_channels, out_capsule_dim
-
+        # routing or so3_transformer
         lrf_sequence.append(block.ConvolutionalCapsuleLayer(
             num_in_capsules=4,
             in_capsule_dim=10,
@@ -81,6 +73,7 @@ class LrfLayer(nn.Module):
 
         self.soft_argmarx = sfa.SoftArgmax3D(0.0, 1.0, 'Parzen', float(self.bandwidths[-1] * 2.0), self.softmax_temp)
 
+        # use cholesky to orthonorm 3D rotation matrix
         self.cholesky = Cholesky()
 
     def forward(self, input):  # pylint: disable=W0221
