@@ -11,8 +11,8 @@ from abc import abstractmethod
 import numpy as np
 import torch
 import torch.nn as nn
-from lib.functional import degree_score, squash
-from so3_transformer import SO3Transformer
+from models.caps_models.functional import degree_score, squash
+from models.caps_models.so3_transformer import SO3Transformer
 from s2cnn import (
     S2Convolution,
     SO3Convolution,
@@ -322,3 +322,34 @@ class ConvolutionalCapsuleLayer(nn.Module):
                 return so3_integrate(v_j)
             else:
                 return v_j
+
+class RotationEstimateLayer(nn.Module):
+    def __init__(
+        self,
+        num_in_capsules,
+        in_capsule_dim,
+        b_in,
+        b_out,
+    ):
+        super().__init__()
+        self.num_in_capsules = num_in_capsules
+        self.in_capsule_dim = in_capsule_dim
+        self.b_in = b_in
+        self.b_out = b_out
+        grid = so3_equatorial_grid(
+            max_beta=0, max_gamma=0, n_alpha=2 * self.b_in, n_beta=1, n_gamma=1
+        )
+        self.SO3conv = SO3Convolution(self.num_in_capsules * self.in_capsule_dim, 1, self.b_in, self.b_out, grid)
+
+    def forward(self, x):
+        #in_features = self.num_in_capsules * self.in_capsule_dim
+        x = x.view(
+            -1,
+            self.num_in_capsules * self.in_capsule_dim,
+            2 * self.b_in,
+            2 * self.b_in,
+            2 * self.b_in,
+        ) #(1,4,10,48,48,48)
+
+        x = self.SO3conv(x)
+        return x

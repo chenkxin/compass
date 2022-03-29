@@ -3,7 +3,7 @@ import os
 
 import torch
 import torch.nn as nn
-from lib.utils import get_oldest_state
+from models.caps_models.utils import get_oldest_state
 
 from .model_baseline import (
     ModelBaseline_3d,
@@ -14,7 +14,7 @@ from .model_caps import ModelCaps
 from .model_resnet import ModelResNet
 from .model_smnist import SMNIST
 from .model_msvc import MSVC, MSVCCaps
-from ..utils import get_bw
+from models.caps_models.utils import get_bw
 
 
 def makeModel(

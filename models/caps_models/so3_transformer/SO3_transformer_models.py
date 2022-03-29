@@ -7,8 +7,8 @@ from torch import nn
 from torch.nn import functional as F
 from typing import Dict, Tuple, List
 
-from so3_transformer.SO3_transformer_modules import SNormSO3, get_basis_and_r, SSO3Res
-from so3_transformer.equivariant_attention.fibers import Fiber
+from models.caps_models.so3_transformer.SO3_transformer_modules import SNormSO3, get_basis_and_r, SSO3Res
+from models.caps_models.so3_transformer.equivariant_attention.fibers import Fiber
 
 __all__ = ["SO3Transformer"]
 class SO3Transformer(nn.Module):
