@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 
 class ThetaBorisovLoss(nn.Module):
@@ -32,6 +33,25 @@ class ThetaBorisovLoss(nn.Module):
 
         return angles
 
+class PoseDiffLoss(nn.Module):
+
+    def __init__(self, device):
+        super().__init__()
+
+        self.device = device
+        self.eps = 1e-7
+
+    def forward(self, tensor_quat_a, tensor_quat_b):
+        """
+         Compute difference between rotation matrix as in http://boris-belousov.net/2016/12/01/quat-dist/ on batch tensor
+         :param tensor_mat_a: a tensor of rotation quaternion in format [B x 3 X 3]
+         :param tensor_mat_b: a tensor of rotation quaternion in format [B x 3 X 3]
+         :return: B values in range [0, 3.14]
+         """
+
+        temp = torch.clamp(torch.abs((tensor_quat_a * tensor_quat_b).sum(dim=-1)), max=0.9999)
+        distance = 2 * torch.acos(temp) / np.pi
+        return distance.mean()
 
 class ChamferLoss(nn.Module):
 
