@@ -1,5 +1,4 @@
 from scipy.spatial.transform import Rotation as R
-
 def Mat_to_Quat(matrix):
      '''
      matrix: input a 3D rotaion matrix
