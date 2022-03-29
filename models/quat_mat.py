@@ -1,5 +1,3 @@
-import numpy
-import torch
 from scipy.spatial.transform import Rotation as R
 
 def Mat_to_Quat(matrix):
