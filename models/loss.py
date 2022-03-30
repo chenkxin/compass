@@ -43,7 +43,7 @@ class PoseDiffLoss(nn.Module):
 
     def forward(self, tensor_quat_a, tensor_quat_b):
         """
-         Compute difference between rotation matrix as in http://boris-belousov.net/2016/12/01/quat-dist/ on batch tensor
+         Compute difference between quaternion as in http://boris-belousov.net/2016/12/01/quat-dist/ on batch tensor
          :param tensor_mat_a: a tensor of rotation quaternion in format [B x 3 X 3]
          :param tensor_mat_b: a tensor of rotation quaternion in format [B x 3 X 3]
          :return: B values in range [0, 3.14]
@@ -82,4 +82,31 @@ class ChamferLoss(nn.Module):
         distances = (x_squared.transpose(2, 1) + y_squared - 2 * zz)
 
         return distances.min(1)[0], distances.min(2)[0]
-        
+
+if __name__ == '__main__':
+    matrices_a = [
+        [[0.6755, -0.1136, 0.7286],
+        [0.5045, -0.6494, -0.5690],
+        [0.5378, 0.7519, -0.3814]],
+        [[-0.89565879, 0.34191775, 0.28440742],
+        [0.08167378, 0.75506646, -0.65054134],
+        [-0.43717814, -0.55943445, -0.70420762]],
+        [[0.7789, 0.5514, -0.2988],
+        [-0.5807, 0.4542, -0.6756],
+        [-0.2368, 0.6998, 0.6740]]
+    ]
+    matrices_b = [
+        [[0.9149, -0.1865, -0.3581],
+         [0.3634, 0.7669, 0.5290],
+         [0.1760, -0.6141, 0.7694]],
+        [[-0.9399, 0.2979, -0.1667],
+         [0.3361, 0.7218, -0.6050],
+         [0.0599, 0.6247, 0.7786]],
+        [[0.8067, -0.4157, -0.4200],
+         [-0.2514, 0.4017, -0.8806],
+         [-0.5348, -0.8160, -0.2196]]
+    ]
+    loss = ThetaBorisovLoss(device='cuda')
+    loss.forward(torch.tensor(matrices_a).cuda(), torch.tensor(matrices_b).cuda())
+
+    # loss = ThetaBorisovLoss(device='cuda')
