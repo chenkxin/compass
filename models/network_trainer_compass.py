@@ -153,7 +153,11 @@ class CompassNetworkTrainer(nt.NetworkTrainer):
         return validation_loader
 
     def init_losses(self):
-        self.criterion_theta = l.ThetaBorisovLoss(self.device)
+        # using 3D rotation matrix loss
+        # self.criterion_theta = l.ThetaBorisovLoss(self.device)
+
+        # using quaternion loss
+        self.criterion_theta = l.PoseDiffLoss(self.device)
 
         return True
 
@@ -301,6 +305,7 @@ class CompassNetworkTrainer(nt.NetworkTrainer):
         lrfs_src = results_forward_step['lrfs'].data.cpu().numpy()
         lrfs_rnd = results_forward_step['lrfs_rnd'].data.cpu().numpy()
 
+        # lrf_repeatability is for partial shape matching
         batch_lrf_repeatability = ug.lrf_repeatability(lrfs_src=np.transpose(lrfs_src, (0, 2, 1)),
                                                        lrfs_trg=np.transpose(lrfs_rnd, (0, 2, 1)),
                                                        mat_from_src_to_trg=results_forward_step['mats_rot_rnd'].data.cpu().numpy(),

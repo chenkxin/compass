@@ -2,7 +2,11 @@ import torch
 import torch.nn as nn
 import numpy as np
 
+from pytorch3d.transforms import random_rotations
+from pytorch3d.transforms import matrix_to_quaternion
+from pytorch3d.transforms import quaternion_to_matrix
 
+# using 3D rotation matrix
 class ThetaBorisovLoss(nn.Module):
 
     def __init__(self, device):
@@ -33,6 +37,7 @@ class ThetaBorisovLoss(nn.Module):
 
         return angles
 
+# using quaternion
 class PoseDiffLoss(nn.Module):
 
     def __init__(self, device):
@@ -41,17 +46,20 @@ class PoseDiffLoss(nn.Module):
         self.device = device
         self.eps = 1e-7
 
-    def forward(self, tensor_quat_a, tensor_quat_b):
+    def forward(self, tensor_matrix_a, tensor_matrix_b):
         """
          Compute difference between quaternion as in http://boris-belousov.net/2016/12/01/quat-dist/ on batch tensor
-         :param tensor_mat_a: a tensor of rotation quaternion in format [B x 3 X 3]
-         :param tensor_mat_b: a tensor of rotation quaternion in format [B x 3 X 3]
+         :param tensor_mat_a: a tensor of rotation matrix in format [B x 3 X 3]
+         :param tensor_mat_b: a tensor of rotation matrix in format [B x 3 X 3]
          :return: B values in range [0, 3.14]
          """
-
-        temp = torch.clamp(torch.abs((tensor_quat_a * tensor_quat_b).sum(dim=-1)), max=0.9999)
-        distance = 2 * torch.acos(temp) / np.pi
-        return distance.mean()
+        tensor_quat_a = matrix_to_quaternion(tensor_matrix_a)
+        tensor_quat_b = matrix_to_quaternion(tensor_matrix_b)
+        temp = torch.clamp(torch.abs((tensor_quat_a *  tensor_quat_b).sum(dim=-1)), max=0.9999)
+        # distance = 2 * torch.acos(temp) / np.pi
+        # return distance.mean()
+        distance = 2 * torch.acos(temp)
+        return distance
 
 class ChamferLoss(nn.Module):
 
@@ -106,7 +114,18 @@ if __name__ == '__main__':
          [-0.2514, 0.4017, -0.8806],
          [-0.5348, -0.8160, -0.2196]]
     ]
+    matrices_a = random_rotations(3, device='cuda')
+    matrices_b = random_rotations(3, device='cuda')
+    # matrices_a = torch.tensor(matrices_a).cuda()
+    # matrices_b = torch.tensor(matrices_b).cuda()
+    print(torch.det(matrices_a))
+    print(torch.det(matrices_b))
     loss = ThetaBorisovLoss(device='cuda')
-    loss.forward(torch.tensor(matrices_a).cuda(), torch.tensor(matrices_b).cuda())
+    angles = loss.forward(matrices_a, matrices_b)
+    print(angles)
+
+    loss = PoseDiffLoss(device='cuda')
+    angles = loss.forward(matrices_a, matrices_b)
+    print(angles)
 
     # loss = ThetaBorisovLoss(device='cuda')
