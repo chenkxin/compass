@@ -1,4 +1,5 @@
 import open3d as o3d
+import torch
 from plyfile import PlyData
 
 import numpy as np
@@ -127,3 +128,10 @@ def get_overlapping_areas_stanford(file):
             dict_overlap["{}-{}".format(name_cloud_src, name_cloud_trg)] = overlap
 
     return dict_overlap
+
+if __name__ == '__main__':
+    points = torch.rand(3, 3)
+    res = o3d.utility.Vector3dVector
+    # print(res.DoubleVector)
+    pcd = o3d.geometry.RGBDImage
+    np_points = np.random.rand(100, 3)
