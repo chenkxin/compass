@@ -5,6 +5,7 @@ from models import loss as l
 from models import network_trainer as nt
 from models import network_s2_layer as nsl
 from models import network_lrf_layer as nll
+from models import network_lrf_capsule_layer as nlcl
 from models import soft_argmax as sfa
 
 from utils import io as uio
@@ -61,7 +62,7 @@ class CompassNetworkTrainer(nt.NetworkTrainer):
                                  use_equatorial_grid = self.use_equatorial_grid)
 
         # Load local reference frame layer
-        self.layer_lrf = nll.LrfLayer(bandwidths=self.args.lrf_bandwidths[1:],
+        self.layer_lrf = nlcl.LrfLayer(bandwidths=self.args.lrf_bandwidths[1:],
                                       features=self.args.lrf_features[1:],
                                       softmax_temp=self.softmax_temp,
                                       use_equatorial_grid=self.use_equatorial_grid)

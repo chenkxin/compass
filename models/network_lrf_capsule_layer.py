@@ -9,8 +9,8 @@ from utils import sb_torch as uto
 
 from s2cnn import so3_equatorial_grid, SO3Convolution, so3_near_identity_grid
 
-from caps_models import block
-from caps_models.so3_transformer import SO3Transformer
+from models.caps_models import block
+from models.caps_models.so3_transformer import SO3Transformer
 from models.cholesky import Cholesky
 class LrfLayer(nn.Module):
     def __init__(self, bandwidths, features, softmax_temp, use_equatorial_grid, use_residual_block=True):

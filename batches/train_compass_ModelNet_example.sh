@@ -11,7 +11,7 @@
 # If you find this work useful please cite
 
 date=`date +%Y-%m-%d`
-nm_train="Compass_ModelNet_quat_nocapsule"
+nm_train="Compass_ModelNet_quat_capsule_cholesky"
 
 #dir_ds="/media/mmarcon/data/DATASETS/modelnet40_ply_hdf5_2048/" #path to the dataset
 dir_ds="/home/chenkangxin/compass/data/modelnet40" #path to the dataset
@@ -28,7 +28,7 @@ ext="h5"
 rad_desc=0.30
 num_work=12
 num_pts=2048
-sz_btch=8
+sz_btch=4
 #sz_btch=4
 stp_save=200
 stp_viz=50
