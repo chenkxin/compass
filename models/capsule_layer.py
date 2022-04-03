@@ -13,15 +13,14 @@ from models.caps_models import block
 from models.caps_models.so3_transformer import SO3Transformer
 from models.cholesky import Cholesky
 class CapsuleLayer(nn.Module):
-    def __init__(self, bandwidths, features, capsules, softmax_temp, use_residual_block=True):
+    def __init__(self, bandwidths, features, capsules, use_residual_block=True):
         super().__init__()
 
         self.bandwidths = bandwidths # It is a list contained in_band_width and out_band_width for every capsule layer
         self.features = features # It is a list contained in_features and out_features for every capsule layer
-        self.softmax_temp = softmax_temp
-        self.use_residual_block = use_residual_block
+        # self.softmax_temp = softmax_temp
         self.capsules = capsules # It is a list contained in_capsules_nums and out_capsules_nums for every capsule layer
-        self.use_residual_block = self.use_residual_block
+        self.use_residual_block = use_residual_block
 
         caps_sequence = []
         # 胶囊层
@@ -62,34 +61,35 @@ class CapsuleLayer(nn.Module):
             b_out=self.bandwidths[l + 1],
         ))
 
-        self.caps_layer = nn.Sequential(*caps_sequence)
+        # self.caps_layer = nn.Sequential(*caps_sequence)
 
-        self.soft_argmarx = sfa.SoftArgmax3D(0.0, 1.0, 'Parzen', float(self.bandwidths[-1] * 2.0), self.softmax_temp)
+        # self.soft_argmarx = sfa.SoftArgmax3D(0.0, 1.0, 'Parzen', float(self.bandwidths[-1] * 2.0), self.softmax_temp)
 
         # use cholesky to orthonorm 3D rotation matrix
-        self.cholesky = Cholesky()
+        # self.cholesky = Cholesky()
 
     def forward(self, input):  # pylint: disable=W0221
-        lrf_features_map = self.caps_layer(input)
-
-        arg_maxima = self.soft_argmarx(lrf_features_map)
-
-        size_alphas = lrf_features_map.shape[-2]
-        size_betas = lrf_features_map.shape[-1]
-        size_gammas = lrf_features_map.shape[-3]
+    #     lrf_features_map = self.caps_layer(input)
+    #
+    #     arg_maxima = self.soft_argmarx(lrf_features_map)
+    #
+    #     size_alphas = lrf_features_map.shape[-2]
+    #     size_betas = lrf_features_map.shape[-1]
+    #     size_gammas = lrf_features_map.shape[-3]
 
         # Swap Alpha and Beta
-        arg_maxima = arg_maxima.reshape(-1, 3)
+        # arg_maxima = arg_maxima.reshape(-1, 3)
 
-        alphas = math.pi * arg_maxima[:, 1] / (size_alphas * 0.5)
-        betas = math.pi * (2 * arg_maxima[:, 0] + 1) / (4 * (size_betas * 0.5))
-        gammas = math.pi * arg_maxima[:, 2] / (size_gammas * 0.5)
+        # alphas = math.pi * arg_maxima[:, 1] / (size_alphas * 0.5)
+        # betas = math.pi * (2 * arg_maxima[:, 0] + 1) / (4 * (size_betas * 0.5))
+        # gammas = math.pi * arg_maxima[:, 2] / (size_gammas * 0.5)
 
-        mat_lrf = uto.b_get_rotation_matrices_from_euler_angles_on_tensor(alphas, betas, gammas, device=input.device)
+        # mat_lrf = uto.b_get_rotation_matrices_from_euler_angles_on_tensor(alphas, betas, gammas, device=input.device)
 
         # cholesky
-        mat_lrf[0] = self.cholesky(mat_lrf[0])
-        return lrf_features_map, mat_lrf
+        # mat_lrf[0] = self.cholesky(mat_lrf[0])
+        # return lrf_features_map, mat_lrf
+        pass
 
     def __repr__(self):
         layer_str = ""
@@ -102,12 +102,12 @@ class CapsuleLayer(nn.Module):
 if __name__ == '__main__':
     a = torch.randn(1, 40, 48, 48, 48)
     print(a.shape)
-    # bandwidths, features, capsules, softmax_temp, use_residual_block = True
+    # bandwidths, features, capsules, use_residual_block = True
     # self.features = [40, 40, 40, 40]
     # self.bandwidths = [24, 24, 24, 24]
     # self.capsules = [0, 4, 4, 4] # 初始胶囊层没有输入胶囊个数
 
-    layer = CapsuleLayer(bandwidths=[24, 24, 24, 24], features=[40, 40, 40, 40], capsules=[0, 4, 4, 4], softmax_temp=1.0, use_residual_block=True)
+    layer = CapsuleLayer(bandwidths=[24, 24, 24, 24], features=[40, 40, 40, 40], capsules=[0, 4, 4, 4], use_residual_block=True)
     res = layer(a)
     print(res)
     print(res[0].shape)

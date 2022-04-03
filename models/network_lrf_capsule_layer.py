@@ -10,16 +10,18 @@ from utils import sb_torch as uto
 from s2cnn import so3_equatorial_grid, SO3Convolution, so3_near_identity_grid
 
 from models.caps_models import block
+from models.capsule_layer import CapsuleLayer
 from models.caps_models.so3_transformer import SO3Transformer
 from models.cholesky import Cholesky
 class LrfLayer(nn.Module):
-    def __init__(self, bandwidths, features, softmax_temp, use_equatorial_grid, use_residual_block=True):
+    def __init__(self, bandwidths, features, softmax_temp, use_equatorial_grid, use_residual_block=True, caps_params=None):
         super().__init__()
 
         self.bandwidths = bandwidths
         self.features = features
         self.softmax_temp = softmax_temp
         self.use_residual_block = use_residual_block
+        self.caps_params = caps_params
 
         lrf_sequence = []
         # SO3 layers
@@ -38,23 +40,34 @@ class LrfLayer(nn.Module):
         lrf_sequence.append(nn.BatchNorm3d(self.features[-1], affine=True))
 
         # 胶囊层
+        caps_bandwidths=self.caps_params['bandwidths'],
+        # dict[key] 赋值给其他变量， 一定转换成了 tuple
+        caps_bandwidths=caps_bandwidths[0]
+        caps_features=self.caps_params['features'],
+        caps_features=caps_features[0]
+        caps_capsules=self.caps_params['capsules'],
+        caps_capsules=caps_capsules[0]
+        caps_use_residual_block=self.caps_params['use_residual_block'],
+        caps_use_residual_block=caps_use_residual_block[0]
         # 初级胶囊层
+        l = 0
         lrf_sequence.append(block.PrimaryCapsuleLayer(
-            in_features=self.features[-1], # 40
-            num_out_capsules=4,
-            capsule_dim=10,
-            b_in=24,
-            b_out=24,
-            use_residual_block=self.use_residual_block
+            in_features=caps_features[l],
+            num_out_capsules=caps_capsules[l + 1],
+            capsule_dim=int(caps_features[l + 1] / caps_capsules[l + 1]),
+            b_in=caps_bandwidths[l],
+            b_out=caps_bandwidths[l + 1],
+            use_residual_block=caps_use_residual_block
         ))
+        l = l + 1
         # routing or so3_transformer
         lrf_sequence.append(block.ConvolutionalCapsuleLayer(
-            num_in_capsules=4,
-            in_capsule_dim=10,
-            num_out_capsules=4,
-            out_capsule_dim=10,
-            b_in=24,
-            b_out=24,
+            num_in_capsules=caps_capsules[l],
+            in_capsule_dim=int(caps_features[l] / caps_capsules[l]),
+            num_out_capsules=caps_capsules[l + 1],
+            out_capsule_dim=int(caps_features[l + 1] / caps_capsules[l + 1]),
+            b_in=caps_bandwidths[l],
+            b_out=caps_bandwidths[l + 1],
             # num_channels = 64,
             is_class=False,
             use_residual_block=True,
@@ -62,12 +75,20 @@ class LrfLayer(nn.Module):
             batch_size=8,
             nclass=10
         ))
+        l = l + 1
         lrf_sequence.append(block.RotationEstimateLayer(
-            num_in_capsules=4,
-            in_capsule_dim=10,
-            b_in=24,
-            b_out=24,
+            num_in_capsules=caps_capsules[l],
+            in_capsule_dim=int(caps_features[l] / caps_capsules[l]),
+            b_in=caps_bandwidths[l],
+            b_out=caps_bandwidths[l + 1],
         ))
+
+        # lrf_sequence.append(CapsuleLayer(
+        #     bandwidths=self.caps_params['bandwidths'],
+        #     features=self.caps_params['features'],
+        #     capsules=self.caps_params['capsules'],
+        #     use_residual_block=self.caps_params['use_residual_block'],
+        # ))
 
         self.lrf_layer = nn.Sequential(*lrf_sequence)
 
@@ -110,7 +131,14 @@ if __name__ == '__main__':
     a = torch.randn(1, 4, 48, 48, 48)
     print(a.shape)
     # bandwidths, features, softmax_temp, use_equatorial_grid
-    layer = LrfLayer([24, 24, 24], [4, 50, 40], 1.0, True, True)
+    # caps_params: bandwidths = [24, 24, 24, 24], features = [40, 40, 40, 40], capsules = [0, 4, 4,4], use_residual_block = True
+    caps_params = {
+        'bandwidths': [24, 24, 24, 24],
+        'features': [40, 40, 40, 40],
+        'capsules': [0, 4, 4, 4],
+        'use_residual_block': True
+    }
+    layer = LrfLayer([24, 24, 24], [4, 50, 40], 1.0, True, True, caps_params=caps_params)
     res = layer(a)
     print(res)
     print(res[0].shape)
