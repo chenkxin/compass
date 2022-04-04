@@ -23,7 +23,7 @@ class Cholesky(nn.Module):
         R = torch.mm(x, L.inverse().t())
         return R
 
-def cholesky(x, epsilon=1e-7):
+def cholesky(x, epsilon=1e-7, device='cuda'):
     '''
     Computes a matrix that orthogonalizes the input matrix x
 
@@ -34,13 +34,12 @@ def cholesky(x, epsilon=1e-7):
                 right multiplication
     '''
     x_2 = torch.mm(x.t(), x)
-    x_2 += torch.eye(x.shape[1]).cuda() * torch.tensor(epsilon, device='cuda')
+    x_2 += torch.eye(x.shape[1], device=device, requires_grad=True) * epsilon
     L = torch.cholesky(x_2)
     R = torch.mm(x, L.inverse().t())
     return R
 
 if __name__ == '__main__':
-    x = torch.randn(3, 3)
-    cholesky = Cholesky()
-    R = cholesky.forward(x)
+    x = torch.randn(3, 3).cuda()
+    R = cholesky(x)
     print(torch.mm(R.t(), R))
