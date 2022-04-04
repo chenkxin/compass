@@ -11,7 +11,7 @@
 # If you find this work useful please cite
 
 date=`date +%Y-%m-%d`
-nm_train="Compass_ModelNet_quat_capsule_nocholesky"
+nm_train="Compass_ModelNet_quat_capsule_nocholesky_bandwidths12"
 
 #dir_ds="/media/mmarcon/data/DATASETS/modelnet40_ply_hdf5_2048/" #path to the dataset
 dir_ds="/home/chenkangxin/MyProject/compass/data/modelnet40" #path to the dataset
