@@ -63,9 +63,14 @@ class CompassNetworkTrainer(nt.NetworkTrainer):
 
         # Load local reference frame layer
         self.layer_lrf = nlcl.LrfLayer(bandwidths=self.args.lrf_bandwidths[1:],
-                                      features=self.args.lrf_features[1:],
-                                      softmax_temp=self.softmax_temp,
-                                      use_equatorial_grid=self.use_equatorial_grid)
+                                       features=self.args.lrf_features[1:],
+                                       softmax_temp=self.softmax_temp,
+                                       use_equatorial_grid=self.use_equatorial_grid,
+                                       caps_bandwidths=self.args.caps_bandwidths,
+                                       caps_features=self.args.caps_features,
+                                       caps_capsules=self.args.caps_capsules,
+                                       caps_use_residual_block=self.args.caps_use_residual_block
+                                       )
 
         # Save Network to file
         file_net = open(os.path.join(self.args.path_log, self.args.name_train + "_net.info"), "w")

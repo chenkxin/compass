@@ -18,7 +18,7 @@ class Cholesky(nn.Module):
                     right multiplication
         '''
         x_2 = torch.mm(x.t(), x)
-        x_2 += torch.eye(x.shape[1]) * epsilon
+        x_2 += torch.eye(x.shape[1]).cuda() * torch.tensor(epsilon, device='cuda')
         L = torch.cholesky(x_2)
         R = torch.mm(x, L.inverse().t())
         return R
