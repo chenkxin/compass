@@ -12,7 +12,7 @@ from s2cnn import so3_equatorial_grid, SO3Convolution, so3_near_identity_grid
 from models.caps_models import block
 from models.capsule_layer import CapsuleLayer
 from models.caps_models.so3_transformer import SO3Transformer
-from models.cholesky import Cholesky
+from models.cholesky import cholesky
 class LrfLayer(nn.Module):
     def __init__(self, bandwidths, features, softmax_temp, use_equatorial_grid, caps_bandwidths, caps_features, caps_capsules, caps_use_residual_block):
         super().__init__()
@@ -87,9 +87,6 @@ class LrfLayer(nn.Module):
 
         self.soft_argmarx = sfa.SoftArgmax3D(0.0, 1.0, 'Parzen', float(self.bandwidths[-1] * 2.0), self.softmax_temp)
 
-        # use cholesky to orthonorm 3D rotation matrix
-        self.cholesky = Cholesky()
-
     def forward(self, input):  # pylint: disable=W0221
         lrf_features_map = self.lrf_layer(input)
 
@@ -108,8 +105,8 @@ class LrfLayer(nn.Module):
 
         mat_lrf = uto.b_get_rotation_matrices_from_euler_angles_on_tensor(alphas, betas, gammas, device=input.device)
 
-        # cholesky
-        mat_lrf[0] = self.cholesky(mat_lrf[0])
+        # use cholesky to orthonorm 3D rotation matrix
+        # mat_lrf[0] = cholesky(mat_lrf[0])
         return lrf_features_map, mat_lrf
 
     def __repr__(self):
