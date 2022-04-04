@@ -1,6 +1,6 @@
 size_channels: 4
-size_bandwidth: 8
-lrf_bandwidths: [8, 8, 8, 8, 8]
+size_bandwidth: 12
+lrf_bandwidths: [12, 12, 12, 12, 12]
 lrf_features: [4, 40, 20, 10, 1]
 augmentation: 1
 leaf_sub_sampling: 0
@@ -14,7 +14,7 @@ step_per_save: 200
 step_per_viz: 50
 name_data_set: ModelNet
 removal_augmentation: 0
-caps_bandwidths: [8, 8, 8, 8]
+caps_bandwidths: [12, 12, 12, 12]
 caps_features: [1, 40, 40, 40]
 caps_capsules: [0, 4, 4, 4]
 caps_use_residual_block: True
